@@ -1,24 +1,45 @@
-"use client"
-import Card from './components/card'
-import Titulo from './components/titulo'
-import Image from 'next/image'
-import { useState } from 'react';
+'use client'
+import React, { useState, useEffect } from 'react';
+import Card from './components/card';
+import Titulo from './components/titulo';
+import Image from 'next/image';
 
 export default function Home() {
-  const [filmes, setFilmes] = useState([])
+  const [filmes, setFilmes] = useState({ filmes2000: [], filmes1900: [] });
 
   const options = {
     method: 'GET',
     headers: {
       accept: 'application/json',
-      Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIxZTkyMjY2NzQ4MWFiMjA3ZDY0MjQ1MGIwZWZiNDYxZSIsInN1YiI6IjVlYTA5ZTZiYmU0YjM2MDAxYzU5NWExNSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.Vhu0pPCiIwmtrpyOHdBlQid8HJJllaHthn1MERS_ANg'
-    }
+      Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIxZTkyMjY2NzQ4MWFiMjA3ZDY0MjQ1MGIwZWZiNDYxZSIsInN1YiI6IjVlYTA5ZTZiYmU0YjM2MDAxYzU5NWExNSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.Vhu0pPCiIwmtrpyOHdBlQid8HJJllaHthn1MERS_ANg',
+    },
   };
+
+
+  const fetchMovies = () => {
+    fetch('https://api.themoviedb.org/3/trending/movie/week?language=pt-BR', options)
+      .then((response) => response.json())
+      .then((response) => {
+
+        const filmes2000 = response.results.filter((filme) => {
+          const anoLancamento = parseInt(filme.release_date?.split('-')[0]);
+          return anoLancamento >= 2000;
+        });
   
-  fetch('https://api.themoviedb.org/3/trending/movie/week?language=pt-BR', options)
-    .then(response => response.json())
-    .then(response => setFilmes(response.results))
-    .catch(err => console.error(err));
+    
+        const filmes1900 = response.results.filter((filme) => {
+          const anoLancamento = parseInt(filme.release_date?.split('-')[0]);
+          return anoLancamento >= 1900 && anoLancamento < 2000;
+        });
+  
+        setFilmes({ filmes2000, filmes1900 });
+      })
+      .catch((err) => console.error(err));
+  };
+ 
+  useEffect(() => {
+    fetchMovies();
+  }, []);
 
   return (
     <main className="flex min-h-screen flex-col">
@@ -34,13 +55,27 @@ export default function Home() {
 
       <Titulo>Os mais procurados</Titulo>
       <section className='flex flex-wrap gap-4 p-4'>
-        {filmes && filmes.map(filme => <Card filme={filme} /> ) }
-        
+        {filmes.filmes2000 &&
+          filmes.filmes2000.map((filme) => <Card filme={filme} key={filme.id} />)
+        }
+        {filmes.filmes1900 &&
+          filmes.filmes1900.map((filme) => <Card filme={filme} key={filme.id} />)
+        }
       </section>
 
       <Titulo>2000...</Titulo>
+      <section className='flex flex-wrap gap-4 p-4'>
+        {filmes.filmes2000 &&
+          filmes.filmes2000.map((filme) => <Card filme={filme} key={filme.id} />)
+        }
+      </section>
+
       <Titulo>1990...</Titulo>
-      
+      <section className='flex flex-wrap gap-4 p-4'>
+        {filmes.filmes1900 &&
+          filmes.filmes1900.map((filme) => <Card filme={filme} key={filme.id} />)
+        }
+      </section>
     </main>
-  )
+  );
 }
