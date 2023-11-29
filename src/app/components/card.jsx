@@ -30,7 +30,7 @@ export default function Card({filme}){
                 <i></i>
                 <span>{filme.vote_average.toFixed(1)}</span>
             </div>
-            <a href="" className="bg-amber-400 text-black w-full rounded py-1 text-center">detalhes</a>
+            <a href="" className="bg-amber-400 text-black w-full rounded py-1 text-center">Sinopse</a>
         </div>
     )
 }
