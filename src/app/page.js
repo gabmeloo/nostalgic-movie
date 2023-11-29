@@ -1,5 +1,5 @@
 import Card from './components/card'
-import Titulo from './components/titulo'
+ import Titulo from './components/titulo'
 import Image from 'next/image'
 
 export default function Home() {
