@@ -1,5 +1,5 @@
 {
-  "name": "nostalgic-movie",
+  "name": "senacfilmes",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -11,7 +11,7 @@
   "dependencies": {
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
-    "@mui/icons-material": "^5.14.18",
+    "@mui/icons-material": "^5.14.16",
     "@mui/material": "^5.14.17",
     "next": "14.0.1",
     "react": "^18",
